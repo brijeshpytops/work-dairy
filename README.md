@@ -43,3 +43,19 @@ Run server
 
 Change your port
 >>> python manage.py runserver [8090]
+
+
+
+For Git
+
+add all file in git
+>>> git add .
+
+commit all filoe in git
+>>> git commit -m "add message here"
+
+push your code on github in specific branch
+>>> git push origin [branch-name]
+
+create new branch and move in
+>>> git checkout -b [branch-name]
