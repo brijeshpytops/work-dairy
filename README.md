@@ -38,11 +38,23 @@ Befor create a django project make sure you have install Djanog
 Create django project 
 >>> django-admin startproject [project] .
 
+Create django app
+>>> python manage.py startapp [master]
+
 Run server
 >>> python manage.py runserver
 
 Change your port
 >>> python manage.py runserver [8090]
+
+
+Migrate table in your database
+>>> python manage.py migrate
+
+Create superuser account
+>>> python manage.py createsuperuser
+
+
 
 
 
