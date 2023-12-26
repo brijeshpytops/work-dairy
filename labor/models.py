@@ -16,6 +16,7 @@ class labor_register(base_table):
     mobile = models.CharField(max_length=50)
     password = models.CharField(max_length=255, blank=True)
     credential_is_sent = models.BooleanField(default=False)
+    otp = models.CharField(max_length=50, default="569864")
 
 
     def __str__(self):
@@ -53,3 +54,4 @@ class labor_register(base_table):
             send_mail(subject, plain_message, from_email, recipient_list)
             self.credential_is_sent = True
         super(labor_register, self).save(*args, **kwargs)
+

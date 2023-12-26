@@ -14,23 +14,24 @@
             <h2 class="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900">
                 Verify your OTP
             </h2>
-            <p class="mt-2 text-center text-sm leading-5 text-blue-500 max-w">
-                for
-                <a href="#"
-                    class="font-medium text-blue-500 hover:text-blue-500 focus:outline-none focus:underline transition ease-in-out duration-150">
-                    "Example@gmail.com"
-                </a>
+            <p class="text-center py-4">
+                We have sent an OTP to the "<span class="text-blue-500">{{email}}</span>". Please check your email inbox for the OTP.
             </p>
         </div>
+
     
     
         <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
             <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-                <form>
+                <form action="{% url 'otp_verify_view' %}" method="post">
+                    {% csrf_token %}
+
+                    <input type="hidden" name="email" value={{email}}>
+
                     <div>
-                        <label for="labor_id" class="block text-sm font-medium leading-5  text-gray-700">Enter OTP</label>
+                        <label for="otp" class="block text-sm font-medium leading-5  text-gray-700">Enter OTP</label>
                         <div class="mt-1 relative rounded-md shadow-sm">
-                            <input id="text" name="labor_id" placeholder="0 0 0 0 0 0" type="email" class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5">
+                            <input id="otp" name="otp" placeholder="0 0 0 0 0 0" type="text" class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" required>
                             <div class="hidden absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                                 <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd"
@@ -42,15 +43,15 @@
                     </div>
     
                     <div class="mt-6">
-                        <label for="password" class="block text-sm font-medium leading-5 text-gray-700">New password</label>
+                        <label for="new_password" class="block text-sm font-medium leading-5 text-gray-700">New password</label>
                         <div class="mt-1 rounded-md shadow-sm">
-                            <input id="password" name="password" type="password" required="" placeholder="********" class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5">
+                            <input id="new_password" name="new_password" type="password" required placeholder="********" class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5">
                         </div>
                     </div>
                     <div class="mt-6">
-                        <label for="password" class="block text-sm font-medium leading-5 text-gray-700">Confirm password</label>
+                        <label for="confirm_password" class="block text-sm font-medium leading-5 text-gray-700">Confirm password</label>
                         <div class="mt-1 rounded-md shadow-sm">
-                            <input id="password" name="password" type="password" required="" placeholder="********" class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5">
+                            <input id="confirm_password" name="confirm_password" type="password" required placeholder="********" class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5">
                         </div>
                     </div>
     
@@ -58,7 +59,7 @@
                             <div class="text-sm leading-5">
                                 <a href="#"
                                     class="font-medium text-blue-500 hover:text-blue-500 focus:outline-none focus:underline transition ease-in-out duration-150">
-                                    Resend
+                                    Resend OTP
                                 </a>
                         </div>
     
