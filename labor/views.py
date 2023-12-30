@@ -116,7 +116,12 @@ def dashboard_view(request):
 
 @labor_id_required
 def tasks_view(request):
-    return render(request, 'tasks.html')
+    labor_id_ = request.session.get('labor_id')
+    parties_ = parties_detail.objects.filter(labor_id=labor_id_)
+    context = {
+        'parties_':parties_
+    }
+    return render(request, 'tasks.html', context)
 
 @labor_id_required
 def parties_view(request):
@@ -141,8 +146,45 @@ def parties_view(request):
         new_party.save()
         print("Party added")
         return redirect('parties_view')
-        
-    return render(request, 'parties.html')
+    
+    parties_ = parties_detail.objects.all().order_by('-id')
+    context = {
+        'parties':parties_
+    }
+    return render(request, 'parties.html', context)
+
+@labor_id_required
+def update_party_details(request,id):
+    get_party = parties_detail.objects.get(id=id)
+    if request.method == 'POST':
+        firm_name_ = request.POST['firmname']
+        first_name_ = request.POST['firstname']
+        last_name_ = request.POST['lastname']
+        email_ = request.POST['email']
+        mobile_ = request.POST['mobile']
+        address_ = request.POST['address']
+        get_party.firm_name = firm_name_
+        get_party.first_name = first_name_
+        get_party.last_name = last_name_
+        get_party.email = email_
+        get_party.mobile = mobile_
+        get_party.address = address_
+        get_party.save()
+        print("Party details updated")
+        return redirect('parties_view')
+
+
+    context = {
+        'get_party':get_party
+    }
+    return render(request, 'update-party.html', context)
+
+@labor_id_required
+def delete_party(request, id):
+    get_party = parties_detail.objects.get(id=id)
+    get_party.delete()
+    print("Party delete")
+    return redirect('parties_view')
 
 @labor_id_required
 def payments_view(request):

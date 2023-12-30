@@ -11,6 +11,8 @@ urlpatterns = [
     path('dashboard_view/', dashboard_view, name ='dashboard_view'),
     path('tasks_view/', tasks_view, name='tasks_view'),
     path('parties_view/', parties_view, name='parties_view'),
+    path('update_party_details/<int:id>', update_party_details, name='update_party_details'),
+    path('delete_party/<int:id>', delete_party, name='delete_party'),
     path('payments_view/', payments_view, name='payments_view'),
     path('profile_view/', profile_view, name='profile_view'),
 ]
