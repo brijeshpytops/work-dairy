@@ -147,7 +147,7 @@ def parties_view(request):
         print("Party added")
         return redirect('parties_view')
     
-    parties_ = parties_detail.objects.all().order_by('-id')
+    parties_ = parties_detail.objects.filter(labor_id=request.session.get('labor_id')).order_by('-id')
     context = {
         'parties':parties_
     }
