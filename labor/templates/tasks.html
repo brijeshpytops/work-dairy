@@ -21,7 +21,7 @@ Tasks
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         id="firmname">
                         <option value="" disabled selected>Select a firm...</option>
-                        {% for party in parties_ %}
+                        {% for party in parties %}
                         <option value="{{party.id}}">{{party.firm_name}}</option>
                         {% endfor %}
                         <!-- Add more options as needed -->
@@ -98,32 +98,47 @@ Tasks
                     </tr>
                 </thead>
                 <tbody>
-                    
-                    <!-- <tr class="bg-white dark:bg-gray-800">
+                    {% if tasks|length == 0 %}
+                    <tr class="bg-white dark:bg-gray-800">
                         <td colspan="6" class="px-6 py-4 text-center text-xl">
-                            No parties available.
+                            No tasks available.
                         </td>
-                    </tr> -->
-
+                    </tr>
+                    {% else %}
+                    {% for task in tasks %}
                     <tr class="bg-white dark:bg-gray-800">
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {{task.task_id}}
                         </th>
                         <td class="px-6 py-4">
+                            {{task.title}}
                         </td>
                         <td class="px-6 py-4">
+                            {{task.task_status}}
                         </td>
                         <td class="px-6 py-4">
+                            {% if task.payment_status == 'Pending' %}
+                            <i class="fa fa-circle text-red-500" aria-hidden="true"></i> &nbsp;{{ task.payment_status }}
+                            {% elif task.payment_status == 'Partially Paid' %}
+                            <i class="fa fa-circle text-yellow-500" aria-hidden="true"></i> &nbsp;{{ task.payment_status
+                            }}
+                            {% elif task.payment_status == 'Done' %}
+                            <i class="fa fa-circle text-green-500" aria-hidden="true"></i> &nbsp;{{ task.payment_status }}
+                            {% endif %}
+
                         </td>
                         <td class="px-6 py-4">
                             <div class="flex">
-                                <a href="" class="text-blue-500"><i
+                                <a href="{% url 'update_task' task_id=task.task_id %}" class="text-blue-500"><i
                                         class="fa fa-pencil-square-o fa-2x mr-2" aria-hidden="true"></i></a>
                                 |
-                                <a href="" class="text-red-500"><i
+                                <a href="{% url 'delete_task' task_id=task.task_id %}" class="text-red-500"><i
                                         class="fa fa-trash fa-2x ml-2" aria-hidden="true"></i></a>
                             </div>
                         </td>
                     </tr>
+                    {% endfor %}
+                    {% endif %}
                 </tbody>
             </table>
         </div>

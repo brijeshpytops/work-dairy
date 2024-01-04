@@ -10,6 +10,7 @@ def add_task(request):
         total_payment_ = request.POST['total_payment']
 
         new_task = task.objects.create(
+            labor_id_id = request.session.get('labor_id'),
             party_id_id=party_id_,
             title=title_,
             content=content_,

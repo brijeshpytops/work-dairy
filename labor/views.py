@@ -1,9 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.core.mail import send_mail
 import random
 from django.conf import settings
 from .models import labor_register
-from parties.models import parties_detail
+from parties.models import parties_detail, task
 
 
 def labor_id_required(view_func):
@@ -118,10 +118,33 @@ def dashboard_view(request):
 def tasks_view(request):
     labor_id_ = request.session.get('labor_id')
     parties_ = parties_detail.objects.filter(labor_id=labor_id_)
+    tasks_ = task.objects.filter(labor_id=labor_id_).order_by('-created_at')
     context = {
-        'parties_':parties_
+        'parties':parties_,
+        'tasks':tasks_
     }
     return render(request, 'tasks.html', context)
+
+@labor_id_required
+def update_task(request, task_id):
+    get_task_details = task.objects.get(task_id=task_id)
+    labor_id_ = request.session.get('labor_id')
+    parties_ = parties_detail.objects.filter(labor_id=labor_id_)
+    instance = get_object_or_404(task, task_id=task_id)
+
+    context = {
+        'task':get_task_details,
+        'parties':parties_,
+        'TASK_STATUS': instance.TASK_STATUS,
+        'task_status':get_task_details.task_status
+    }
+    return render(request,'update-task.html', context)
+
+@labor_id_required
+def delete_task(request, task_id):
+    delete_task_ = task.objects.get(task_id=task_id)
+    delete_task_.delete()
+    return redirect('tasks_view')
 
 @labor_id_required
 def parties_view(request):

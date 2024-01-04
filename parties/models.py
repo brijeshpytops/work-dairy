@@ -29,6 +29,7 @@ class task(base_table):
     )
     task_id = models.CharField(primary_key=True, max_length=50, blank=True)
     party_id = models.ForeignKey(parties_detail, on_delete=models.CASCADE)
+    labor_id = models.ForeignKey(labor_register,on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     content = models.TextField()
     total_payment = models.FloatField()
