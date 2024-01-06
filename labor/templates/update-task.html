@@ -57,15 +57,13 @@ Update-task
         </div>
         <div class="mb-4">
             <label class="block text-gray-700 text-sm font-bold mb-2" for="title">
-
                 Paid Payment &nbsp;
-
                 {% if task.payment_status == 'Pending' %}
-                <i class="fa fa-circle text-red-500" aria-hidden="true"></i> &nbsp;{{ task.payment_status }}
+                <i class="fa fa-circle text-red-500" aria-hidden="true">&nbsp;{{ task.payment_status }}</i> 
                 {% elif task.payment_status == 'Partially Paid' %}
-                <i class="fa fa-circle text-yellow-500" aria-hidden="true"></i> &nbsp;{{ task.payment_status }}
+                <i class="fa fa-circle text-yellow-500" aria-hidden="true">&nbsp;{{ task.payment_status }}</i> 
                 {% elif task.payment_status == 'Done' %}
-                <i class="fa fa-circle text-green-500" aria-hidden="true"></i> &nbsp;{{ task.payment_status }}
+                <i class="fa fa-circle text-green-500" aria-hidden="true">&nbsp;{{ task.payment_status }}</i> 
                 {% endif %}
             </label>
             <input name="paid_payment"
@@ -78,13 +76,15 @@ Update-task
                 Task Status
             </label>
             <div class="relative">
-                <select name="task_status"
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="task_status">
-                    {% for status, display_text in TASK_STATUS %}
-                        <option value="{{ status }}" {% if status == task_status %} selected {% endif %}>{{ display_text }}</option>
-                    {% endfor %}
-                </select>
+                <input name="task_status"
+                class="py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="task_status" type="radio" value="Pending" {% if task.task_status == 'Pending' %}checked{% endif %}>Pending
+                <input name="task_status"
+                class="py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="task_status" type="radio" value="Ongoing" {% if task.task_status == 'Ongoing' %}checked{% endif %}> On-Going
+                <input name="task_status"
+                class="py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="task_status" type="radio" value="Done" {% if task.task_status == 'Done' %}checked{% endif %}> Done
             </div>
         </div>
 

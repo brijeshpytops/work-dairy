@@ -1,6 +1,7 @@
 from django.db import models
 from master.models import base_table, counter_table
 from labor.models import labor_register
+from master.utils.wd_datetime.current_datetime import current_time_data
 
 class parties_detail(base_table):
     labor_id = models.ForeignKey(labor_register, on_delete=models.CASCADE)
@@ -34,7 +35,8 @@ class task(base_table):
     content = models.TextField()
     total_payment = models.FloatField()
     task_status = models.CharField(choices=TASK_STATUS, default='Pending', max_length=50, blank=True)
-    paid_payment = models.FloatField(default=0, blank=True)
+    paid_payment = models.FloatField(default=0,blank=True)
+    remaining_payment = models.FloatField(blank=True)
     payment_status = models.CharField(choices=PAYMENT_STATUS, max_length=50, default='Pending', blank=True)  
 
     def __str__(self):
@@ -46,4 +48,27 @@ class task(base_table):
             counters.last_task_id += 1
             counters.save()
             self.task_id = str(self.party_id.labor_id) + "_" + str(counters.last_task_id)
+        if not self.remaining_payment:
+            self.remaining_payment = self.total_payment
         super(task, self).save(*args, **kwargs)
+
+class payment_installment(base_table):
+    payment_id = models.CharField(primary_key=True, max_length=50, blank=True)
+    task_id = models.ForeignKey(task, on_delete=models.CASCADE)
+    labor_id = models.ForeignKey(labor_register, on_delete=models.CASCADE)
+    payment_entry = models.FloatField(default=0)
+    paid_date = models.DateField(default=current_time_data().date())
+
+    def __str__(self):
+        return self.payment_id
+    
+    def save(self, *args, **kwargs):
+        if not self.payment_id:
+            counters = counter_table.objects.get(id=1)
+            counters.last_payment_entry_id += 1
+            counters.save()
+            print(counters.last_payment_entry_id)
+            self.payment_id = str(self.task_id) + '_' + str(counters.last_payment_entry_id)
+            print(self.payment_id)
+        super(payment_installment, self).save(*args, **kwargs)
+

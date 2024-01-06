@@ -147,6 +147,22 @@ def delete_task(request, task_id):
     return redirect('tasks_view')
 
 @labor_id_required
+def payment_entry(request, task_id):
+    get_task_details = task.objects.get(task_id=task_id)
+    if request.method == 'POST':
+        payment_entry_ = request.POST['payment_entry']
+        payment_date_ = request.POST['payment_date']
+
+        # if payment_entry_ <= get_task_details.total_payment:
+        #     if get_task_details.paid_payment <= get_task_details.total_payment:
+        #     get_task_details.paid_payment += payment_entry_
+        
+    
+    context = {
+        'task':get_task_details,
+    }
+    return render(request, 'task-payment.html',context)
+@labor_id_required
 def parties_view(request):
     if request.method == 'POST':
         firm_name_ = request.POST['firmname']
