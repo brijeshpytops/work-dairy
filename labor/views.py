@@ -3,7 +3,7 @@ from django.core.mail import send_mail
 import random
 from django.conf import settings
 from .models import labor_register
-from parties.models import parties_detail, task
+from parties.models import parties_detail, task, payment_installment
 
 
 def labor_id_required(view_func):
@@ -132,6 +132,24 @@ def update_task(request, task_id):
     parties_ = parties_detail.objects.filter(labor_id=labor_id_)
     instance = get_object_or_404(task, task_id=task_id)
 
+    if request.method == 'POST':
+        firmname_ = request.POST['firmname']
+        title_ = request.POST['title']
+        content_ = request.POST['content']
+        task_status_ = request.POST['task_status']
+
+        print(firmname_, "======")
+
+        get_task_details.party_id_id = firmname_
+        get_task_details.title = title_
+        get_task_details.content = content_
+        get_task_details.task_status = task_status_
+
+        get_task_details.save()
+        print("Task updated")
+        return redirect('tasks_view')
+
+
     context = {
         'task':get_task_details,
         'parties':parties_,
@@ -150,13 +168,36 @@ def delete_task(request, task_id):
 def payment_entry(request, task_id):
     get_task_details = task.objects.get(task_id=task_id)
     if request.method == 'POST':
-        payment_entry_ = request.POST['payment_entry']
+        payment_installment_ = float(request.POST['payment_entry'])
         payment_date_ = request.POST['payment_date']
+        if payment_installment_ != 0:
+            if payment_installment_ <= get_task_details.remaining_payment:
+                print(get_task_details.total_payment, get_task_details.paid_payment, get_task_details.remaining_payment, "before")
+                get_task_details.remaining_payment -= payment_installment_
+                get_task_details.paid_payment += payment_installment_
+                print(get_task_details.total_payment, get_task_details.paid_payment, get_task_details.remaining_payment, "after")
 
-        # if payment_entry_ <= get_task_details.total_payment:
-        #     if get_task_details.paid_payment <= get_task_details.total_payment:
-        #     get_task_details.paid_payment += payment_entry_
-        
+                if get_task_details.total_payment == get_task_details.paid_payment:
+                    get_task_details.payment_status = 'Done'
+                else:
+                    get_task_details.payment_status = 'Partially Paid'
+                get_task_details.save()
+
+                new_payment_entry = payment_installment.objects.create(
+                    task_id_id = task_id,
+                    labor_id_id = get_task_details.labor_id,
+                    payment_entry= payment_installment_,
+                    paid_date=payment_date_
+                )
+                new_payment_entry.save()
+                print(f"{payment_installment_} added")
+                return redirect('tasks_view')
+            else:
+                print("Invalid installment")
+                return redirect('tasks_view')
+        else:
+            print("0 not allowed")
+            return redirect('tasks_view')
     
     context = {
         'task':get_task_details,

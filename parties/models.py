@@ -1,7 +1,7 @@
 from django.db import models
+from django.utils import timezone
 from master.models import base_table, counter_table
 from labor.models import labor_register
-from master.utils.wd_datetime.current_datetime import current_time_data
 
 class parties_detail(base_table):
     labor_id = models.ForeignKey(labor_register, on_delete=models.CASCADE)
@@ -41,6 +41,8 @@ class task(base_table):
 
     def __str__(self):
         return self.task_id  
+    
+    
 
     def save(self, *args, **kwargs):
         if not self.task_id:
@@ -48,7 +50,9 @@ class task(base_table):
             counters.last_task_id += 1
             counters.save()
             self.task_id = str(self.party_id.labor_id) + "_" + str(counters.last_task_id)
-        if not self.remaining_payment:
+
+        print(self.remaining_payment, "-----------")
+        if self.remaining_payment is None:
             self.remaining_payment = self.total_payment
         super(task, self).save(*args, **kwargs)
 
@@ -57,8 +61,7 @@ class payment_installment(base_table):
     task_id = models.ForeignKey(task, on_delete=models.CASCADE)
     labor_id = models.ForeignKey(labor_register, on_delete=models.CASCADE)
     payment_entry = models.FloatField(default=0)
-    paid_date = models.DateField(default=current_time_data().date())
-
+    paid_date = models.DateField(default=timezone.now().date)
     def __str__(self):
         return self.payment_id
     

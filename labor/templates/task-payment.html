@@ -10,13 +10,36 @@ Add-Task-Payment
         {% csrf_token %}
         <h3
             class="self-center text-xl mb-6 font-semibold whitespace-nowrap dark:text-white bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 inline-block text-transparent bg-clip-text">
-            Add Task Payment - [{{task.task_id}}]</h3>
+            Task Account - [{{task.task_id}}]</h3>
+
+
+        
+
+<div class="w-full my-4 text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+    <a class="relative inline-flex items-center w-full px-4 py-2 text-sm font-medium border border-gray-300 rounded-t-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white justify-between">
+        <span>Total Amount</span>
+        <span><i class="fa fa-inr"></i> {{task.total_payment}}</span>
+        
+    </a>
+    <a class="relative inline-flex items-center w-full px-4 py-2 text-sm font-medium border border-gray-300 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white justify-between">
+        <span>Paid Amount</span>
+        <span><i class="fa fa-inr"></i> {{task.paid_payment}}</span>
+        
+    </a>
+    <a class="relative inline-flex items-center w-full px-4 py-2 text-sm font-medium border border-gray-300 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white justify-between">
+        <span>Remaining Amount</span>
+        <span><i class="fa fa-inr"></i> {{task.remaining_payment}}</span>
+        
+    </a>
+</div>
+
+
 
 
 
         <div class="mb-4">
             <label class="block text-gray-700 text-sm font-bold mb-2" for="payment_entry">
-                Payment
+                Payment Installment
             </label>
             <input name="payment_entry"
                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"

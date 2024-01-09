@@ -49,15 +49,7 @@ Update-task
         </div>
         <div class="mb-4">
             <label class="block text-gray-700 text-sm font-bold mb-2" for="total_payment">
-                Total Payment
-            </label>
-            <input name="total_payment"
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="total_payment" type="text" placeholder="Rs. 1250" value="{{task.total_payment}}">
-        </div>
-        <div class="mb-4">
-            <label class="block text-gray-700 text-sm font-bold mb-2" for="title">
-                Paid Payment &nbsp;
+                Total Payment &nbsp;
                 {% if task.payment_status == 'Pending' %}
                 <i class="fa fa-circle text-red-500" aria-hidden="true">&nbsp;{{ task.payment_status }}</i> 
                 {% elif task.payment_status == 'Partially Paid' %}
@@ -66,9 +58,9 @@ Update-task
                 <i class="fa fa-circle text-green-500" aria-hidden="true">&nbsp;{{ task.payment_status }}</i> 
                 {% endif %}
             </label>
-            <input name="paid_payment"
+            <input name="total_payment"
                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="paid_payment" type="text" placeholder="saree..." value="{{task.paid_payment}}" disabled>
+                id="total_payment" type="text" placeholder="Rs. 1250" value="{{task.total_payment}}" disabled>
         </div>
 
         <div class="mb-4">
