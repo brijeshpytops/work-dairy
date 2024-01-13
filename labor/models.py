@@ -40,27 +40,26 @@ class labor_register(base_table):
             from_email = settings.EMAIL_HOST_USER
             recipient_list = [f'{self.email}']
 
-            html_message = f"""
+            html_message = """
             <!DOCTYPE html>
             <html lang="en">
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Document</title>
             </head>
             <body>
                 <h1 style="color: red;">Login credential</h1>
                 <pre>
-                    Dear : {{f'{self.first_name} {self.last_name}'}}
+                    Dear : {} {}
 
-                    Login ID : {{self.labor_id}}
-                    Password : {{self.password}}
+                    Login ID : {}
+                    Password : {}
 
                     Thank you
                 </pre>
             </body>
             </html>
-            """
+            """.format(self.first_name, self.last_name,self.labor_id, self.password)
             plain_message = strip_tags(html_message)
             send_mail(subject, plain_message, from_email, recipient_list)
             self.credential_is_sent = True
