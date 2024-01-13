@@ -40,18 +40,28 @@ class labor_register(base_table):
             from_email = settings.EMAIL_HOST_USER
             recipient_list = [f'{self.email}']
 
-            # context = {
-            #     'full_name': f'{self.first_name} {self.last_name}',
-            #     'login_id': self.labor_id,
-            #     'passcode': self.password
-            # }
+            html_message = f"""
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Document</title>
+            </head>
+            <body>
+                <h1 style="color: red;">Login credential</h1>
+                <pre>
+                    Dear : {{f'{self.first_name} {self.last_name}'}}
 
-            # template_path = os.path.join('templates', 'labor-login-credentials.html')
-            # html_message = render_to_string(template_path, context)
-            # plain_message = strip_tags(html_message)
+                    Login ID : {{self.labor_id}}
+                    Password : {{self.password}}
 
-
-
-            # send_mail(subject, plain_message, from_email, recipient_list)
-            # self.credential_is_sent = True
+                    Thank you
+                </pre>
+            </body>
+            </html>
+            """
+            plain_message = strip_tags(html_message)
+            send_mail(subject, plain_message, from_email, recipient_list)
+            self.credential_is_sent = True
         super(labor_register, self).save(*args, **kwargs)
