@@ -3,6 +3,7 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.conf import settings
+import os
 
 from master.models import base_table, counter_table
 from master.utils.unique import generate_password
@@ -39,17 +40,18 @@ class labor_register(base_table):
             from_email = settings.EMAIL_HOST_USER
             recipient_list = [f'{self.email}']
 
-            context = {
-                'full_name': f'{self.first_name} {self.last_name}',
-                'login_id': self.labor_id,
-                'passcode': self.password
-            }
+            # context = {
+            #     'full_name': f'{self.first_name} {self.last_name}',
+            #     'login_id': self.labor_id,
+            #     'passcode': self.password
+            # }
 
-            html_message = render_to_string('mail-templates\labor-login-credentials.html', context)
-            plain_message = strip_tags(html_message)
+            # template_path = os.path.join('templates', 'labor-login-credentials.html')
+            # html_message = render_to_string(template_path, context)
+            # plain_message = strip_tags(html_message)
 
 
 
-            send_mail(subject, plain_message, from_email, recipient_list)
-            self.credential_is_sent = True
+            # send_mail(subject, plain_message, from_email, recipient_list)
+            # self.credential_is_sent = True
         super(labor_register, self).save(*args, **kwargs)
