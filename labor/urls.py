@@ -18,4 +18,5 @@ urlpatterns = [
     path('delete_party/<int:id>', delete_party, name='delete_party'),
     path('payments_view/', payments_view, name='payments_view'),
     path('profile_view/', profile_view, name='profile_view'),
+    path('social_view/', social_view, name='social_view'),
 ]

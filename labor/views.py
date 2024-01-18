@@ -6,7 +6,7 @@ import random
 from django.conf import settings
 from .models import labor_register
 from parties.models import parties_detail, task, payment_installment
-
+import requests
 
 def labor_id_required(view_func):
     def _wrapped_view(request, *args, **kwargs):
@@ -292,3 +292,18 @@ def payments_view(request):
 def profile_view(request):
     return render(request, 'profile.html')
 
+@labor_id_required
+def social_view(request):
+    api_url = 'https://workdiaryapi.pythonanywhere.com/'
+
+    res = requests.get(api_url)
+
+    if res.status_code == 200:
+        api_data = res.json()
+    else:
+        api_data = []
+
+    context = {
+        'tasks':api_data
+    }
+    return render(request, 'social.html', context)
