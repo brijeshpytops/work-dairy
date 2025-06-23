@@ -51,6 +51,28 @@ def login_view(request):
     return render(request, 'login.html')
 
 def register_request_view(request):
+    if request.method == 'POST':
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        email = request.POST.get('email')
+        mobile = request.POST.get('mobile')
+
+        print(first_name, last_name, email, mobile)
+
+        try:
+            labor = labor_register(
+                first_name=first_name,
+                last_name=last_name,
+                email=email,
+                mobile=mobile,
+            )
+            labor.save()
+            messages.success(request, 'Labor registered successfully and credentials sent.')
+            return redirect('login_view')  # Replace with your success page/view
+        except Exception as e:
+            print("Error while saving labor:", e)
+            messages.error(request, 'An error occurred during registration.')
+
     return render(request, 'register-request.html')
 
 def forgot_password_view(request):
@@ -118,7 +140,16 @@ def logout(request):
 
 @labor_id_required
 def dashboard_view(request):
-    return render(request, 'dashboard.html')
+    labor_id_ = request.session.get('labor_id')
+    total_parties_ = parties_detail.objects.filter(labor_id=labor_id_).count()
+    total_tasks_ = task.objects.filter(labor_id=labor_id_).count()
+    total_amount_ = task.objects.filter(labor_id=labor_id_).aggregate(total=Sum('total_payment'))
+    context = {
+        'total_parties':total_parties_,
+        'total_tasks':total_tasks_,
+        'total_amount':total_amount_['total']
+    }
+    return render(request, 'dashboard.html', context)
 
 @labor_id_required
 def tasks_view(request):
@@ -290,7 +321,11 @@ def payments_view(request):
 
 @labor_id_required
 def profile_view(request):
-    return render(request, 'profile.html')
+    party = get_object_or_404(labor_register, labor_id=request.session.get('labor_id'))
+    context = {
+        'party':party
+    }
+    return render(request, 'profile.html', context)
 
 @labor_id_required
 def social_view(request):
